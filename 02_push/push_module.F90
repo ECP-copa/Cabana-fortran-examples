@@ -14,7 +14,13 @@ module push_module
 
   integer FCABANA_DEVICE :: n_subcycles
 
-  PARTICLE_OP_INTERFACE(particle_push)
+  interface
+     integer(C_INT) function particle_push(sp, num_particle) bind(C, name="particle_push")
+       use iso_c_binding
+       integer(C_INT), intent(in), value :: sp
+       integer(C_INT), intent(in), value :: num_particle
+     end function
+  end interface
 
   contains
 

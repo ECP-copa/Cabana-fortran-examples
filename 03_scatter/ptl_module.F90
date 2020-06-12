@@ -35,14 +35,21 @@ module ptl_module
 
   ! Interface to the C++ routine that allocates the AoSoA.
   interface
-    integer(C_INT) function particle_allocation(num_particle) bind(C,name='particle_allocation');
+    integer(C_INT) function particle_allocation(num_particle) bind(C,name='particle_allocation')
       use iso_c_binding
       integer(C_INT), intent(in), value :: num_particle
     end function
   end interface
 
   ! Interface for initializing particle info.
-  PARTICLE_OP_INTERFACE(particle_initialization)
+  interface
+     integer(C_INT) function particle_initialization(sp, num_particle) bind(C, name="particle_initialization")
+       use iso_c_binding
+       integer(C_INT), intent(in), value :: sp
+       integer(C_INT), intent(in), value :: num_particle
+     end function
+  end interface
+
 
   contains
 

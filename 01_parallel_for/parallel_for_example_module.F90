@@ -12,14 +12,23 @@
 #include "../Fortran_features/cabana_fortran_macros.h"
 
 module parallel_for_example_module
-  use, intrinsic :: ISO_C_BINDING
+  !use, intrinsic :: ISO_C_BINDING
+  use iso_c_binding
   implicit none
 
   ! Example array
   real(8) FCABANA_DEVICE, allocatable :: particle_position(:)
 
   ! Interface fortran main uses to call the C++ parallel_for
-  MISC_OP_INTERFACE(parallel_for_example)
+  ! MISC_OP_INTERFACE(parallel_for_example)
+  interface
+     integer(C_INT) function parallel_for_example(sp, ep) &
+       bind(C, name="parallel_for_example")
+       use iso_c_binding
+       integer(C_INT), intent(in), value :: sp
+       integer(C_INT), intent(in), value :: ep
+     end function
+  end interface
 
   contains
 

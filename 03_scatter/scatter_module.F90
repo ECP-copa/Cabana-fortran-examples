@@ -10,7 +10,13 @@ module scatter_module
   use, intrinsic :: ISO_C_BINDING
   implicit none
 
-  PARTICLE_OP_INTERFACE(particle_scatter)
+  interface
+     integer(C_INT) function particle_scatter(sp, num_particle) bind(C, name="particle_scatter")
+       use iso_c_binding
+       integer(C_INT), intent(in), value :: sp
+       integer(C_INT), intent(in), value :: num_particle
+     end function
+  end interface
 
   contains
 

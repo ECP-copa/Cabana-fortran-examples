@@ -37,10 +37,10 @@
 #if USE_GPU==1
 #define PARTICLE_OP(C_FUNC,F_FUNC) \
   extern "C" int C_FUNC( int sp, int np ); \
-  extern "C" CABANA_FUNCTION void F_FUNC(local_particle_struct_t*, int, int); \
+  extern "C" KOKKOS_FUNCTION void F_FUNC(local_particle_struct_t*, int, int); \
   int C_FUNC(int start_pt, int num_particle) \
   { \
-      auto* p_loc = (local_particle_struct_t*)(particles->ptr()); \
+      auto* p_loc = (local_particle_struct_t*)(particles->data()); \
       int num_vecs = (num_particle + VEC_LEN - 1) / VEC_LEN; \
       auto local_lambda = KOKKOS_LAMBDA( const int idx ) \
       { \
@@ -54,10 +54,10 @@
 #else
 #define PARTICLE_OP(C_FUNC,F_FUNC) \
 extern "C" int C_FUNC( int sp, int np ); \
-extern "C" CABANA_FUNCTION void F_FUNC(local_particle_struct_t*, int, int); \
+extern "C" KOKKOS_FUNCTION void F_FUNC(local_particle_struct_t*, int, int); \
 int C_FUNC(int sp, int num_particle) \
 { \
-    auto* p_loc = (local_particle_struct_t*)(particles->ptr()); \
+    auto* p_loc = (local_particle_struct_t*)(particles->data()); \
     int num_vecs = (num_particle + VEC_LEN - 1) / VEC_LEN; \
     int start_vec = sp / VEC_LEN - 1; \
     int one_vector = 1; \
@@ -77,7 +77,7 @@ int C_FUNC(int sp, int num_particle) \
 //   e.g. in sorting, since we need to loop over sorting bins at some point.
 #define MISC_OP(C_FUNC,F_FUNC) \
   extern "C" int C_FUNC( int sp, int ep ); \
-  extern "C" CABANA_FUNCTION void F_FUNC( int ); \
+  extern "C" KOKKOS_FUNCTION void F_FUNC( int ); \
   int C_FUNC( int start_pt, int end_pt) \
   { \
     auto local_lambda = KOKKOS_LAMBDA( const int idx ) \
@@ -99,10 +99,10 @@ struct local_particle_struct_t {
 
 // Declare the memory and execution spaces.
 #if USE_GPU == 1
-using MemorySpace = Cabana::CudaUVMSpace;
+using MemorySpace = Kokkos::CudaUVMSpace;
 using ExecutionSpace = Kokkos::Cuda;
 #else
-using MemorySpace = Cabana::HostSpace;
+using MemorySpace = Kokkos::HostSpace;
 #if USE_OMP == 1
 using ExecutionSpace = Kokkos::OpenMP;
 #else
@@ -123,7 +123,7 @@ ParticleList* particles;
 int particle_allocation(int num_particle)
 {
     // Set the particle list size
-    particles = new ParticleList ( num_particle );
+    particles = new ParticleList ("particle_list", num_particle );
     particles->resize( num_particle );
 
     return 0;

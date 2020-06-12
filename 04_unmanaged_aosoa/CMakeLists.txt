@@ -1,5 +1,5 @@
 add_executable(ForParallelForUnmanaged Fortran_main.F90 Fortran_kernels.F90 parallel_for_example.cpp)
-target_link_libraries(ForParallelForUnmanaged cabanacore ${MPI_Fortran_LIBRARIES})
+target_link_libraries(ForParallelForUnmanaged Cabana::cabanacore ${MPI_Fortran_LIBRARIES})
 add_test(NAME Fortran_advance_example_04 COMMAND ForParallelForUnmanaged)
 set_property(TARGET ForParallelForUnmanaged PROPERTY LINKER_LANGUAGE Fortran)
 add_definitions(${MPI_Fortran_COMPILE_FLAGS})
@@ -22,8 +22,15 @@ if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_I
   
   set(CMAKE_EXE_LINKER_FLAGS "-pgc++libs")
 else()
+  if( Cabana_ENABLE_Cuda )
     message("Only PGI is supported for compiling fortran cuda code. Right now
     we only accept building with PGI for both CXX and Fortran to avoid mixing
     compiler families.\n Skip.")
     return()
+  elseif( Cabana_ENABLE_OpenMP )
+    target_compile_definitions(ForParallelForUnmanaged PUBLIC -DUSE_GPU=0)
+    set(CMAKE_Fortran_FLAGS "-fopenmp")
+  elseif( Cabana_ENABLE_Serial )
+    target_compile_definitions(ForParallelForUnmanaged PUBLIC -DUSE_GPU=0)
+  endif()
 endif()

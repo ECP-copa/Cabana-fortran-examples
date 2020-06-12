@@ -114,7 +114,7 @@ void parallelForExample(local_data_struct_t * struct_p, int num_soa, int num_p)
 
       For aosoa to be usable in Fortran, we cast it to local_data_struct_t,
       which is a C struct with exactly the same memory layout as the data in 
-      aosoa->ptr().
+      aosoa->data().
      */
     
 
