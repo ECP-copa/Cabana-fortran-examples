@@ -32,10 +32,10 @@
 
 // Declare the memory and execution spaces.
 #if USE_GPU == 1
-using MemorySpace = Cabana::CudaUVMSpace;
+using MemorySpace = Kokkos::CudaUVMSpace;
 using ExecutionSpace = Kokkos::Cuda;
 #else
-using MemorySpace = Cabana::HostSpace;
+using MemorySpace = Kokkos::HostSpace;
 #if USE_OMP == 1
 using ExecutionSpace = Kokkos::OpenMP;
 #else
@@ -54,7 +54,7 @@ using ExecutionSpace = Kokkos::Serial;
 extern "C" int parallel_for_example( int sp, int ep );
 
 // Define the kernel that will be called inside the parallel_for
-extern "C" CABANA_FUNCTION void parallel_for_example_f( int );
+extern "C" KOKKOS_FUNCTION void parallel_for_example_f( int );
 
 int parallel_for_example( int start_pt, int end_pt)
 {
