@@ -11,7 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
 # find dependencies
-find_package(Kokkos 3 REQUIRED)
 find_package(Cabana REQUIRED)
 
 enable_language(Fortran)
