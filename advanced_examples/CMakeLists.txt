@@ -1,0 +1,5 @@
+add_subdirectory(Fortran_features)
+add_subdirectory(01_parallel_for)
+add_subdirectory(02_push)
+add_subdirectory(03_scatter)
+add_subdirectory(04_unmanaged_aosoa)
