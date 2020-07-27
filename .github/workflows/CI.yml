@@ -1,0 +1,49 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  CI:
+    strategy:
+      matrix:
+        backend: ["OPENMP"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install deps
+        run: sudo apt-get install gfortran openmpi-bin libopenmpi-dev
+      - name: Checkout code
+        uses: actions/checkout@v2.2.0
+      - name: Checkout kokkos
+        uses: actions/checkout@v2.2.0
+        with:
+          repository: kokkos/kokkos
+          ref: 3.1.00
+          path: kokkos
+      - name: Checkout Cabana
+        uses: actions/checkout@v2.2.0
+        with:
+          repository: ECP-copa/Cabana
+          ref: master
+          path: Cabana
+      - name: Build kokkos
+        working-directory: kokkos
+        run: |
+          cmake -B build -DCMAKE_INSTALL_PREFIX=$HOME/kokkos -DKokkos_CXX_STANDARD=14 -DKokkos_ENABLE_${{ matrix.backend }}=ON
+          cmake --build build --parallel 2
+          cmake --install build
+      - name: Build Cabana
+        working-directory: Cabana
+        run: |
+          cmake -B build -DCMAKE_INSTALL_PREFIX=$HOME/Cabana -DCMAKE_PREFIX_PATH="$HOME/kokkos" -DCabana_REQUIRE_${{ matrix.backend }}=ON -DCabana_REQUIRE_MPI=ON -DCabana_ENABLE_CAJITA=OFF
+          cmake --build build --parallel 2
+          cmake --install build
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_PREFIX_PATH="$HOME/kokkos;$HOME/Cabana"
+          cmake --build build --parallel 2
+          cd build && ctest --output-on-failure
