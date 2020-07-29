@@ -1,4 +1,4 @@
-if( Cabana_ENABLE_Cuda )
+if( Kokkos_ENABLE_CUDA )
   if("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI")
     add_definitions(-DSIMD_SIZE=1  -DVEC_LEN=32 -DUSE_GPU=1)
     set(MPI_Fortran_COMPILE_FLAGS "-r -ta=tesla:cuda9.0 -Minfo=accel -Mcuda=cuda9.0")
