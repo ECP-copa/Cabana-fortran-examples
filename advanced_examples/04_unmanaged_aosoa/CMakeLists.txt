@@ -1,10 +1,4 @@
 add_executable(ForParallelForUnmanaged Fortran_main.F90 Fortran_kernels.F90 parallel_for_example.cpp)
-target_link_libraries(ForParallelForUnmanaged Cabana::cabanacore ${MPI_Fortran_LIBRARIES})
-add_test(NAME Fortran_advance_example_04 COMMAND ForParallelForUnmanaged)
-set_property(TARGET ForParallelForUnmanaged PROPERTY LINKER_LANGUAGE Fortran)
-add_definitions(${MPI_Fortran_COMPILE_FLAGS})
-include_directories(${MPI_Fortran_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR}/../Fortran_features)
-link_directories(${MPI_Fortran_LIBRARIES})
 
 message(${CMAKE_Fortran_COMPILER_ID})
 if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "PGI"))
@@ -19,7 +13,7 @@ if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_I
     target_compile_definitions(ForParallelForUnmanaged PUBLIC -DUSE_GPU=0)
     set(CMAKE_Fortran_FLAGS "-ta=host")
   endif()
-  
+
   set(CMAKE_EXE_LINKER_FLAGS "-pgc++libs")
 else()
   if( Kokkos_ENABLE_CUDA )
@@ -34,3 +28,10 @@ else()
     target_compile_definitions(ForParallelForUnmanaged PUBLIC -DUSE_GPU=0)
   endif()
 endif()
+
+target_link_libraries(ForParallelForUnmanaged Cabana::cabanacore ${MPI_Fortran_LIBRARIES})
+add_test(NAME Fortran_advance_example_04 COMMAND ForParallelForUnmanaged)
+set_property(TARGET ForParallelForUnmanaged PROPERTY LINKER_LANGUAGE Fortran)
+add_definitions(${MPI_Fortran_COMPILE_FLAGS})
+include_directories(${MPI_Fortran_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR}/../Fortran_features)
+link_directories(${MPI_Fortran_LIBRARIES})
