@@ -22,8 +22,10 @@ if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_I
     target_link_options(ForParallelFor "-pgc++libs")
   endif()
 else()
+  if( Kokkos_ENABLE_CUDA )
     message("Only PGI is supported for compiling fortran cuda code. Right now
     we only accept building with PGI for both CXX and Fortran to avoid mixing
     compiler families.\n Skip.")
     return()
+  endif()
 endif()
