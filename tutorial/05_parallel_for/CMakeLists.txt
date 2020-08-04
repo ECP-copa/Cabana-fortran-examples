@@ -1,6 +1,6 @@
 add_executable(ForParallelFor Fortran_main.f90 Fortran_kernels.F90 parallel_for_example.cpp)
 target_link_libraries(ForParallelFor Cabana::cabanacore)
-add_test(NAME Fortran_tutorial_05 COMMAND ForParallelFor)
+add_test(NAME Fortran_Tutorial_05_ParFor COMMAND ForParallelFor)
 set_property(TARGET ForParallelFor PROPERTY LINKER_LANGUAGE CXX)
 
 if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "PGI"))

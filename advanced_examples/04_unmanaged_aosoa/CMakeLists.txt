@@ -30,7 +30,7 @@ else()
 endif()
 
 target_link_libraries(ForParallelForUnmanaged Cabana::cabanacore ${MPI_Fortran_LIBRARIES})
-add_test(NAME Fortran_advance_example_04 COMMAND ForParallelForUnmanaged)
+add_test(NAME Fortran_AdvEx_04_Unmanaged COMMAND ForParallelForUnmanaged)
 set_property(TARGET ForParallelForUnmanaged PROPERTY LINKER_LANGUAGE Fortran)
 add_definitions(${MPI_Fortran_COMPILE_FLAGS})
 include_directories(${MPI_Fortran_INCLUDE_PATH} ${CMAKE_CURRENT_BINARY_DIR}/../Fortran_features)

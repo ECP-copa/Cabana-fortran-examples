@@ -25,5 +25,5 @@ set_target_properties(AdvForScatter PROPERTIES COMPILE_FLAGS "${MPI_Fortran_COMP
 set_target_properties(AdvForScatter PROPERTIES LINK_FLAGS "${MPI_Fortran_LINK_FLAGS}")
 
 target_link_libraries(AdvForScatter Cabana::cabanacore ${MPI_Fortran_LIBRARIES} kokkos_fortran_wrappers)
-add_test(NAME Fortran_advanced_example_03 COMMAND AdvForScatter)
+add_test(NAME Fortran_AdvEx_03_Scatter COMMAND AdvForScatter)
 set_property(TARGET AdvForScatter PROPERTY LINKER_LANGUAGE Fortran)
