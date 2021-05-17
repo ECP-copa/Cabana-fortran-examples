@@ -1,4 +1,4 @@
-if( Cabana_ENABLE_Cuda )
+if( Kokkos_ENABLE_CUDA )
   if("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI")
     add_definitions(-DSIMD_SIZE=1  -DVEC_LEN=32 -DUSE_GPU=1)
     set(MPI_Fortran_COMPILE_FLAGS "-r -ta=tesla:cuda9.0 -Minfo=accel -Mcuda=cuda9.0")
@@ -24,5 +24,5 @@ set_target_properties(AdvForParallelFor PROPERTIES COMPILE_FLAGS "${MPI_Fortran_
 set_target_properties(AdvForParallelFor PROPERTIES LINK_FLAGS "${MPI_Fortran_LINK_FLAGS}")
 
 target_link_libraries(AdvForParallelFor Cabana::cabanacore ${MPI_Fortran_LIBRARIES} kokkos_fortran_wrappers)
-add_test(NAME Fortran_advanced_example_01 COMMAND AdvForParallelFor)
+add_test(NAME Fortran_AdvEx_01_ParFor COMMAND AdvForParallelFor)
 set_property(TARGET AdvForParallelFor PROPERTY LINKER_LANGUAGE Fortran)

@@ -1,6 +1,6 @@
 add_executable(ForParallelFor Fortran_main.f90 Fortran_kernels.F90 parallel_for_example.cpp)
 target_link_libraries(ForParallelFor Cabana::cabanacore)
-add_test(NAME Fortran_tutorial_05 COMMAND ForParallelFor)
+add_test(NAME Fortran_Tutorial_05_ParFor COMMAND ForParallelFor)
 set_property(TARGET ForParallelFor PROPERTY LINKER_LANGUAGE CXX)
 
 if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "PGI"))
@@ -22,8 +22,10 @@ if (("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI") AND ("${CMAKE_CXX_COMPILER_I
     target_link_options(ForParallelFor "-pgc++libs")
   endif()
 else()
+  if( Kokkos_ENABLE_CUDA )
     message("Only PGI is supported for compiling fortran cuda code. Right now
     we only accept building with PGI for both CXX and Fortran to avoid mixing
     compiler families.\n Skip.")
     return()
+  endif()
 endif()

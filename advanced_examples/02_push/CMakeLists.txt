@@ -1,4 +1,4 @@
-if( Cabana_ENABLE_Cuda )
+if( Kokkos_ENABLE_CUDA )
   if("${CMAKE_Fortran_COMPILER_ID}" STREQUAL "PGI")
     add_definitions(-DSIMD_SIZE=1  -DVEC_LEN=32 -DUSE_GPU=1)
     set(MPI_Fortran_COMPILE_FLAGS "-r -ta=tesla:cuda9.0 -Minfo=accel -Mcuda=cuda9.0")
@@ -25,5 +25,5 @@ set_target_properties(AdvForPush PROPERTIES COMPILE_FLAGS "${MPI_Fortran_COMPILE
 set_target_properties(AdvForPush PROPERTIES LINK_FLAGS "${MPI_Fortran_LINK_FLAGS}")
 
 target_link_libraries(AdvForPush Cabana::cabanacore ${MPI_Fortran_LIBRARIES} kokkos_fortran_wrappers)
-add_test(NAME Fortran_advanced_example_02 COMMAND AdvForPush)
+add_test(NAME Fortran_AdvEx_02_Push COMMAND AdvForPush)
 set_property(TARGET AdvForPush PROPERTY LINKER_LANGUAGE Fortran)

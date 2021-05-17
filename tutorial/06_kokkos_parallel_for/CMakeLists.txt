@@ -1,6 +1,6 @@
 add_executable(ForKKParallelFor Fortran_main.f90 Fortran_kernel.F90 hello_world.cpp)
 target_link_libraries(ForKKParallelFor Cabana::cabanacore)
-add_test(NAME Fortran_tutorial_06 COMMAND ForKKParallelFor)
+add_test(NAME Fortran_Tutorial_06_KParFor COMMAND ForKKParallelFor)
 set_property(TARGET ForKKParallelFor PROPERTY LINKER_LANGUAGE CXX)
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
@@ -23,6 +23,8 @@ if(CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
   endif()
 
 else()
-  message("Only PGI is supported for compiling fortran cuda code.\n Skip.")
-  return()
+  if( Kokkos_ENABLE_CUDA )
+    message("Only PGI is supported for compiling fortran cuda code.\n Skip.")
+    return()
+  endif()
 endif()
